@@ -2,6 +2,7 @@ const pool = require('../lib/utils/pool');
 const setup = require('../data/setup');
 const request = require('supertest');
 const app = require('../lib/app');
+const Book = require('../lib/models/book');
 
 describe('anyapiproject1 routes', () => {
   beforeEach(() => {
@@ -27,6 +28,27 @@ describe('anyapiproject1 routes', () => {
   it('gets a list of books', async () => {
     const expected = await Book.findAll();
     const res = await request(app).get('/api/v1/books');
+
+    expect(res.body).toEqual(expected);
+  });
+
+  it('returns 404 for book not found', async () => {
+    const res = await request(app).get('/api/v1/books/not-real');
+
+    expect(res.status).toEqual(404);
+  });
+
+  it('updates a book by id', async () => {
+    const expected = {
+      id:expect.any(String),
+      title:'War is a Racket',
+      author: 'Smedly Butler',
+      pages:'120',
+      edition: '4th',
+    };
+    const res = await request(app)
+      .patch('/api/v1/books/1')
+      .send({ edition:'4th' });
 
     expect(res.body).toEqual(expected);
   });
