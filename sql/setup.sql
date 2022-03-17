@@ -15,5 +15,5 @@ INSERT INTO
  books (title, author, pages)
 
  VALUES
- ('War is a Racket', 'Smedly Butler', '120')
- ('Red Notice', 'Bill Browder', '228')
+ ('War is a Racket', 'Smedly Butler', '120'),
+ ('Red Notice', 'Bill Browder', '228');
