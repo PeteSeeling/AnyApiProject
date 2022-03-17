@@ -52,4 +52,10 @@ describe('anyapiproject1 routes', () => {
 
     expect(res.body).toEqual(expected);
   });
+  it('deletes a book by id', async () => {
+    const expected = await Book.findBookById(1);
+    const res = await request(app).delete(`/api/v1/dogs/${expected.id}`);
+
+    expect(res.body.toEqual(expected));
+  });
 });
