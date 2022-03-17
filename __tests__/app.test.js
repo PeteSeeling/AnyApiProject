@@ -13,14 +13,14 @@ describe('anyapiproject1 routes', () => {
     pool.end();
   });
 
-  it ('creates a book', async () => {
+  it('creates a book', async () => {
     const expected = {
       title:'War is a Racket',
       author:'Smedly Butler',
-      pages:'120'
+      pages:120
       
     };
-    const res = await (await request(app).post('api/v1/books')).setEncoding(expected);
+    const res = await request(app).post('/api/v1/books').send(expected);
 
     expect(res.body).toEqual({ id: expect.any(String), ...expected });
   });
@@ -33,7 +33,7 @@ describe('anyapiproject1 routes', () => {
   });
 
   it('returns 404 for book not found', async () => {
-    const res = await request(app).get('/api/v1/books/not-real');
+    const res = await request(app).get('/api/v1/books/9');
 
     expect(res.status).toEqual(404);
   });
@@ -43,12 +43,18 @@ describe('anyapiproject1 routes', () => {
       id:expect.any(String),
       title:'War is a Racket',
       author: 'Smedly Butler',
-      pages:'122',
+      pages:122,
     
     };
     const res = await request(app)
       .patch('/api/v1/books/1')
       .send({ pages:'122' });
+
+    expect(res.body).toEqual(expected);
+  });
+  it('deletes a book by id', async () => {
+    const expected = await Book.findBookById(1);
+    const res = await request(app).delete(`/api/v1/books/${expected.id}`);
 
     expect(res.body).toEqual(expected);
   });
